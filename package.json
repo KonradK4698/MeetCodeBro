@@ -1,0 +1,19 @@
+{
+  "name": "meetcodebro",
+  "version": "1.0.0",
+  "description": "Simple web chat application fro programmers",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KonradK4698/MeetCodeBro.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KonradK4698/MeetCodeBro/issues"
+  },
+  "homepage": "https://github.com/KonradK4698/MeetCodeBro#readme"
+}
