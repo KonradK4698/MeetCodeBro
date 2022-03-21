@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/KonradK4698/MeetCodeBro/issues"
   },
-  "homepage": "https://github.com/KonradK4698/MeetCodeBro#readme"
+  "homepage": "https://github.com/KonradK4698/MeetCodeBro#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
