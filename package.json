@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/KonradK4698/MeetCodeBro#readme",
   "dependencies": {
+    "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "neo4j-driver": "^4.4.4"
   }
