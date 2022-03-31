@@ -7,7 +7,7 @@
     const addUser = (userName, userSurname) => {
         
         session
-        .run(`CREATE (u:User {name:"${userName}", surname:"${userSurname}"})`)
+        .run(`CREATE (u:User {email:"${userName}", password:"${userSurname}"})`)
         .catch(error => {
             console.log(error)
         })

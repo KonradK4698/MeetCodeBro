@@ -1,15 +1,15 @@
-<form> 
-    <label for="email">Imię: </label>
-    <input type="email" name="email" id="userEmail" [formControl]="userEmail" />
+<form [formGroup]="userRegisterForm" (ngSubmit)="onSubmit()"> 
+    <label for="userEmail">Imię: </label>
+    <input id="userEmail" type="email" formControlName="userEmail" />
 
     <br/>
 
-    <label for="password">Nazwisko: </label>
-    <input type="password" name="password" id="userPassword" />
+    <label for="userPassword">Nazwisko: </label>
+    <input id="userPassword" type="password" formControlName="userPassword" />
 
     <br />
 
-    <button type="submit">Register</button>
+    <button type="submit" >Register</button>
 </form>
 
 
