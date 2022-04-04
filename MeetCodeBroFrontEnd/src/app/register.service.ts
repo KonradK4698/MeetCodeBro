@@ -1,7 +1,7 @@
  import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry, tap} from 'rxjs/operators';
+import { catchError, retry, tap, map} from 'rxjs/operators';
 import { User } from './user';
 
 @Injectable({
@@ -11,6 +11,13 @@ export class RegisterService {
 
   private addUserUrl = '/api/register';
   
+  private handleError(error: HttpErrorResponse){
+    if(error.status === 409){
+      return throwError( () => new Error("Użytkownik o podanym adresie e-mail już istnieje."))
+    }
+
+    return throwError( () => new Error("Wystąpił błąd. Spróbuj później."))
+  }
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,12 +29,7 @@ export class RegisterService {
   addUser(user: User): Observable<User>{
     console.log(this.addUserUrl);
     return this.http.post<User>(this.addUserUrl, user, this.httpOptions).pipe(
-      tap(
-      {
-        next: (data) => console.log("Next" + data),
-        error: (error) => console.log(error)
-      }
-      )
+      catchError(this.handleError)
     )
   }
 }
