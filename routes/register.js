@@ -4,10 +4,10 @@
     const session = require('../db')
 
     //add new user to neo4j database
-    const addUser = (userName, userSurname) => {
+    const addUser = (userEmail, userPassword) => {
         
         session
-        .run(`CREATE (u:User {email:"${userName}", password:"${userSurname}"})`)
+        .run(`CREATE (u:User {email:"${userEmail}", password:"${userPassword}"})`)
         .catch(error => {
             console.log(error)
         })
@@ -16,11 +16,13 @@
     
     //add new user to db -  route
     router.post('/', (req,res)=>{
-        const userName = req.body.name;
-        const userSurname = req.body.surname;
-        addUser(userName, userSurname)
+        const userEmail = req.body.email;
+        const userPassword = req.body.password;
+        addUser(userEmail, userPassword)
         res.end();
     });
+
+    
 
 
 module.exports = router;

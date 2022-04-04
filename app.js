@@ -12,7 +12,7 @@ app.use('/', main);
 
 app.use(express.json())
 //register page router
-app.use('/register', register);
+app.use('/api/register', register);
 
 
 app.listen(port, () => {
