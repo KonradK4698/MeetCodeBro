@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const main = require('./routes/main');
-const register = require('./routes/register')
+const register = require('./routes/register');
+const login = require('./routes/login');
 const bodyParser = require('body-parser')
 
 
@@ -13,8 +14,12 @@ require('dotenv').config();
 app.use('/', main);
 
 app.use(express.json())
-//register page router
+
+//register user - api
 app.use('/api/register', register);
+
+//login user - api
+app.use('/api/login', login);
 
 
 app.listen(port, () => {
