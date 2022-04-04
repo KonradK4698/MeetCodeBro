@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const main = require('./routes/main');
 const register = require('./routes/register');
-const login = require('./routes/login');
+// const login = require('./routes/login');
 const bodyParser = require('body-parser')
 
 
@@ -18,8 +18,8 @@ app.use(express.json())
 //register user - api
 app.use('/api/register', register);
 
-//login user - api
-app.use('/api/login', login);
+// //login user - api
+// app.use('/api/login', login);
 
 
 app.listen(port, () => {
