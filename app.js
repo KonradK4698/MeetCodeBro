@@ -6,6 +6,8 @@ const register = require('./routes/register')
 const bodyParser = require('body-parser')
 
 
+//initialize dotenv
+require('dotenv').config();
 
 //main page router
 app.use('/', main);
