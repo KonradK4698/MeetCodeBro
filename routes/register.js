@@ -1,6 +1,5 @@
 
 const express = require('express');
-const res = require('express/lib/response');
 const router = express.Router();
 const session = require('../db');
 const utils = require('../lib/util');
@@ -38,6 +37,18 @@ const registerUser = async (txc, userEmail, userPassword, res)=>{
     
 }
 
+// const testDB = () => {
+//     let data;
+//     session.run(`MATCH (u:User {email: "kwakus18@gmail.com" }) RETURN u AS user`).subscribe({
+//         onNext: record => { data = record.get('user').properties.email; console.log("data") },
+//         onCompleted: () => { session.close()},
+//         onError: error => console.log(error)
+//     })
+
+    
+// }
+
+// testDB();
 //add new user to db -  route
 router.post('/',  async (req,res)=>{
     const userEmail = req.body.email;
@@ -45,6 +56,13 @@ router.post('/',  async (req,res)=>{
     const txc = session.beginTransaction();
     await registerUser(txc, userEmail, userPassword, res);
 });
+
+// router.get('/', async (req,res)=>{
+//     testDB();
+//     // console.log(testDB());
+//     res.send("Działa");
+//     res.end();
+// })
 
     
 

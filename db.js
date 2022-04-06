@@ -5,6 +5,6 @@ const driver = neo4j.driver('neo4j://localhost:7687', neo4j.auth.basic(process.e
 
 const session = driver.session();
 
-console.log("Nawiązano połączenie z bazą danych");
+console.log("Baza danych działa");
 
  module.exports = session;
