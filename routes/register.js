@@ -1,7 +1,8 @@
 
 const express = require('express');
 const router = express.Router();
-const session = require('../db');
+const driver = require('../db');
+const session = driver.session();
 const utils = require('../lib/util');
 
 
