@@ -1,0 +1,15 @@
+<H1>Logowanie</H1>
+
+<form method="POST" [formGroup]="userLoginForm" (ngSubmit)="onSubmit()">
+    <label for="userEmail">Email: </label>
+    <input id="userEmail" type="email" formControlName="userEmail"/>
+
+    <br/>
+
+    <label for="userPassword">Password: </label>
+    <input id="userPassword" type="password" formControlName="userPassword"/> 
+
+    <br/>
+
+    <button type="submit">Zaloguj</button>
+</form>
