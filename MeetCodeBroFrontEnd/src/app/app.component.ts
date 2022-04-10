@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'MeetCodeBroFrontEnd';
+  userLogged: boolean = false;
+  constructor(private authService: AuthService){}
+
+  ngOnInit(){
+    this.userLogged = this.authService.isLoggedIn();
+  }
+
+  logOut(): void{
+    this.authService.logout();
+  }
+
+  
+  
 }
