@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const bodyParser = require('body-parser');
+const passport = require('passport');
+
 const main = require('./routes/main');
 const register = require('./routes/register');
 const login = require('./routes/login');
-const bodyParser = require('body-parser')
-const passport = require('passport');
+const user = require('./routes/user');
+const technologies = require('./routes/technologies')
 
 
 //initialize dotenv
@@ -27,6 +30,12 @@ app.use('/api/register', register);
 
 //login user - api
 app.use('/api/login', login);
+
+//user profile - api
+app.use('/api/user', passport.authenticate('jwt', { session: false }), user)
+
+//technologies - api
+app.use('/api/technologies', passport.authenticate('jwt', { session: false }), technologies)
 
 
 
