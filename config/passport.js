@@ -20,8 +20,8 @@ const options = {
 module.exports = (passport) => {
     passport.use(new JwtStrategy(options, function(jwt_payload, done){
         const session = driver.session();
-        session.run(`MATCH (u:User {email: "${jwt_payload.sub}" }) RETURN u AS user`).subscribe({
-            onNext: record => { const user = record.get('user').properties; done(null, user);},
+        session.run(`MATCH (u:User) WHERE ID(u) = ${jwt_payload.sub.low} RETURN u AS user`).subscribe({
+            onNext: record => { const user = record.get('user').identity; done(null, user);},
             onCompleted: () => { session.close()},
             onError: error => { done(error, null) }
         })

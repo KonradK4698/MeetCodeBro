@@ -16,7 +16,7 @@ router.post('/',  (req, res)=>{
                 const isValid = utils.validPassword(password,hash,salt);
     
                 if(isValid){
-                    const tokenObject = utils.issueJWT(record.get('user').properties);
+                    const tokenObject = utils.issueJWT(record.get('user').identity);
                     res.status(200).json({succes: true, token:tokenObject, expiresIn: tokenObject.expires, msg: "Użytkownik został zalogowany"}).end()
                     
                 }else{
