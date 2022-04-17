@@ -14,7 +14,10 @@ import { AuthService } from './auth.service';
 import { AuthInterceptor } from './auth-interceptor';
 
 //angular material
-
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,10 @@ import { AuthInterceptor } from './auth-interceptor';
     HttpClientModule,
     NgMultiSelectDropDownModule.forRoot(),
     BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
   ],
   providers: [
     AuthService,
