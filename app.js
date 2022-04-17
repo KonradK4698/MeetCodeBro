@@ -8,7 +8,8 @@ const main = require('./routes/main');
 const register = require('./routes/register');
 const login = require('./routes/login');
 const user = require('./routes/user');
-const technologies = require('./routes/technologies')
+const technologies = require('./routes/technologies');
+const friends = require('./routes/friends');
 
 
 //initialize dotenv
@@ -36,6 +37,10 @@ app.use('/api/user', passport.authenticate('jwt', { session: false }), user)
 
 //technologies - api
 app.use('/api/technologies', passport.authenticate('jwt', { session: false }), technologies)
+
+//create friends - api
+
+app.use('/api/friends',  passport.authenticate('jwt', { session: false }), friends)
 
 
 
