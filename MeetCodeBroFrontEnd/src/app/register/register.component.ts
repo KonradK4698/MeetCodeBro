@@ -10,6 +10,8 @@ import { RegisterService } from '../register.service';
 })
 export class RegisterComponent implements OnInit {
 
+  hide = true;
+  
   userRegisterForm = new FormGroup({
     userEmail: new FormControl(''),
     userPassword: new FormControl('')

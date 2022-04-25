@@ -1,15 +1,23 @@
-<form method="POST" [formGroup]="userRegisterForm" (ngSubmit)="onSubmit()"> 
-    <label for="userEmail">Imię: </label>
-    <input id="userEmail" type="email" formControlName="userEmail" />
-
-    <br/>
-
-    <label for="userPassword">Nazwisko: </label>
-    <input id="userPassword" type="password" formControlName="userPassword" />
-
-    <br />
-
-    <button type="submit" >Register</button>
-</form>
+<div class="register-container">
+    <span>Rejestracja</span>
+    <form method="POST" [formGroup]="userRegisterForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="userEmail" placeholder="email@mail.com">
+            <mat-hint>Proszę podać adres email</mat-hint>
+        </mat-form-field>
+    
+        <mat-form-field appearance="fill">
+            <mat-label>Hasło</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="userPassword">
+            <a mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Ukryj hasło'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </a>
+            <mat-hint>Proszę podać hasło</mat-hint>
+          </mat-form-field>
+    
+        <button mat-raised-button color="primary" type="submit">Zarejestruj</button>
+    </form>
+</div>
 
 <H1>{{message}}</H1>
