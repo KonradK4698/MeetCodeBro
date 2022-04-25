@@ -1,0 +1,36 @@
+.login-container{
+    box-sizing: border-box;
+    position: absolute;
+    width: 35%;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background: #fff;
+    padding: 30px;
+    border: 1px solid rgba(116, 116, 116, 0.452);
+    border-radius: 10px;
+    box-shadow: 3px 4px 7px #cbcbcb;
+}
+    span{
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        font-size: 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+        color: #673ab7;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+        mat-form-field{
+            max-width: 100%;
+            width: 70%;
+            min-width: 200px;
+        }

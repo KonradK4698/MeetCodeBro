@@ -11,6 +11,8 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
 
+  hide = true;
+
   userLoginForm = new FormGroup({
     userEmail: new FormControl(''),
     userPassword: new FormControl('')
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.loginService.loginUser({email: userEmail, password: userPassword}).subscribe(
       {
         next: (loginData) => {console.log(loginData); this.authServie.setLocalStorage(loginData)},
-        complete: () => (console.log("User zalogowany")),
+        complete: () => {console.log("User zalogowany"); window.location.reload(); alert("zalogowano");},
         error: (err) => { console.log(err) }
       }
     )
