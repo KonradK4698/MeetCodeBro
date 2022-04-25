@@ -19,6 +19,8 @@ export class AppComponent {
     this.authService.logout();
   }
 
-  
+  openDrawer(drawer: any): void{
+    drawer.open();
+  }
   
 }

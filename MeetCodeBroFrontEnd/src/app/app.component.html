@@ -1,37 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeetCodeBro</title>
-</head>
-<body>
-  <mat-toolbar color="primary">
-    <span>My App</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
-    </button>
-  </mat-toolbar>
-  <H1>MeetCodeBro</H1>
-  <nav>
+<mat-drawer-container class="drawer-container">
+  <mat-drawer #drawer mode="push">
+    <mat-list role="list">
+      <mat-list-item role="listitem"> <a mat-button color="primary" routerLink="/protected">Konto</a> </mat-list-item>
+     </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <nav>
+      <mat-toolbar color="primary">
+        <button *ngIf = "userLogged" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openDrawer(drawer)">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span><a class="appName" routerLink="/">MeetCodeBro</a></span>
+        <span class="example-spacer"></span>
     
-    <h2>Simple navigation</h2> <br/>
+          <button *ngIf = "userLogged" mat-button (click)="logOut()">Wyloguj</button>
     
-    <p><a routerLink="/protected">Zablokowana strona</a></p>
-    
-    <div *ngIf = "userLogged">
-      <p><button (click)="logOut()">Wyloguj</button></p>
-    </div>
-    
-    <div *ngIf = "!userLogged">
-      <p><a routerLink="/login">Logowanie</a></p>
-      <p><a routerLink="/register">Rejestracja</a></p>
-    </div>
-    
-    
-  </nav>
-  <router-outlet></router-outlet>
-</body>
-</html>
+        
+        <div *ngIf = "!userLogged" class="example-button-row">
+          <button mat-button routerLink="/login">Logowanie</button>
+          <button mat-button routerLink="/register">Rejestracja</button>
+        </div>
+      </mat-toolbar>
+    </nav>
+
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
+  
+
