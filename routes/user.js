@@ -3,6 +3,19 @@ const router = express.Router();
 const driver = require('../db');
 const session = driver.session();
 
+const getDataWithoutSaltHash = (userDataInfo) => {
+    const userDataProperties = userDataInfo.properties;
+            let propertiesWithoutSaltHash = {};
+            for(const key in userDataProperties){
+                if(userDataProperties.hasOwnProperty(key) && key !== "hash" && key !== "salt"){
+                    propertiesWithoutSaltHash[key] =  userDataProperties[key];
+                }
+            }
+            const userDataInfoJSON = propertiesWithoutSaltHash;
+
+            return userDataInfoJSON
+}
+
 router.get('/:id', (req,res)=>{
 
     const session = driver.session();
@@ -11,15 +24,8 @@ router.get('/:id', (req,res)=>{
 
         onNext: userData => {
             const userDataInfo = userData.get('USER');
-            const userDataProperties = userDataInfo.properties;
-            console.log(userDataProperties)
-            let propertiesWithoutSaltHash = {};
-            for(const key in userDataProperties){
-                if(userDataProperties.hasOwnProperty(key) && key !== "hash" && key !== "salt"){
-                    propertiesWithoutSaltHash[key] =  userDataProperties[key];
-                }
-            }
-            const userDataInfoJSON = JSON.stringify(propertiesWithoutSaltHash);
+            
+            let userDataInfoJSON = getDataWithoutSaltHash(userDataInfo)
 
             res.status(200).send(userDataInfoJSON);
         },
@@ -28,6 +34,21 @@ router.get('/:id', (req,res)=>{
 
     })
 
+})
+
+router.get('/moreThenOne/id/:param', (req,res)=>{
+    const session = driver.session();
+    const userIdArr = req.params.param;
+    let userDataInfoJsonArr = [];
+    session.run(`MATCH (u:User) WHERE id(u) IN ${userIdArr} RETURN u as USER`).subscribe({
+        onNext: userData => {
+            const userDataInfo = userData.get('USER');
+            const newUserData = getDataWithoutSaltHash(userDataInfo)
+            userDataInfoJsonArr.push(newUserData);
+        },
+        onCompleted: () => {console.log(userDataInfoJsonArr);res.status(200).send(userDataInfoJsonArr); session.close();},
+        onError: (err) => {console.log(err)}
+    })
 })
 
 router.post('/:id', (req,res)=>{
