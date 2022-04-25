@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry, tap, map} from 'rxjs/operators';
 import { User } from './user';
 import { Technology } from 'src/app/technology';
+import { Friend } from './friend';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import { Technology } from 'src/app/technology';
 export class UserProfileService {
 
   private userApiUrl = "/api/user";
-  private technologyApi = "/api/technologies"
+  private technologyApi = "/api/technologies";
+  private friendsApi = "/api/friends";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,6 +34,13 @@ export class UserProfileService {
     );
   }
 
+  getUserArray(userIdArr: number[]): Observable<User[]>{
+    console.log(encodeURIComponent(JSON.stringify(userIdArr)))
+    return this.http.get<User[]>(`${this.userApiUrl}/moreThenOne/id/${encodeURIComponent(JSON.stringify(userIdArr))}`, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );;
+  }
+
   sendUserData(userID: number, data: User): Observable<User>{
     return this.http.post<User>(`${this.userApiUrl}/${userID}`, data, this.httpOptions).pipe(
       catchError(this.handleError)
@@ -48,5 +57,23 @@ export class UserProfileService {
     return this.http.post<Technology[]>(`${this.userApiUrl}/technologies/${userID}`, choosenTechnologies, this.httpOptions).pipe(
       catchError(this.handleError)
     );
+  }
+
+  deleteInvitation(userID: number, invitationID: number): Observable<string>{
+    return this.http.delete<string>(`${this.friendsApi}/deleteInvitation/${userID}/${invitationID}`, this.httpOptions).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getAllFriends(userID: number): Observable<Friend[]>{
+    return this.http.get<Friend[]>(`${this.friendsApi}/${userID}`, this.httpOptions).pipe(catchError(this.handleError))
+  }
+
+  addFriend(senderID: number, recipentID: number): Observable<String>{
+    return this.http.post<String>(`${this.friendsApi}/${senderID}/${recipentID}`, this.httpOptions).pipe(catchError(this.handleError))
+  }
+
+  deleteFriend(userID: number, friendID: number): Observable<string>{
+    return this.http.delete<string>(`${this.friendsApi}/${userID}/${friendID}`, this.httpOptions).pipe(catchError(this.handleError))
   }
 }
