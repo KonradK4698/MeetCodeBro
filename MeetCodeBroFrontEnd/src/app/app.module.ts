@@ -27,13 +27,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
+import { UserCatalogComponent } from './user-catalog/user-catalog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UserCatalogComponent
   ],
   imports: [
     BrowserModule,
