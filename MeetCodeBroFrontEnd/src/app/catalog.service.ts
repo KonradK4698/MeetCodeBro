@@ -18,8 +18,8 @@ export class CatalogService {
 
   constructor(private http: HttpClient) { }
 
-  getUsersCount(): Observable<Number>{
-    return this.http.get<Number>(`${this.userCatalogPath}/userCount`, this.httpOptions);
+  getUsersCount(): Observable<number>{
+    return this.http.get<number>(`${this.userCatalogPath}/userCount`, this.httpOptions);
   }
 
   getUserPerPage(data: limitSkip): Observable<User[]>{
