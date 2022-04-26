@@ -15,15 +15,13 @@ const getNecessaryUserData = (usersData) => {
 //pobierz liczbę użytkowników dostępnych w bazie danych
 router.get('/userCount', (req,res)=>{
     const session = driver.session();
-    const userCount = {
-        count: 0
-    }
+    let userCount = 0
     session.run('MATCH (u:User) RETURN count(u) AS usersCount').subscribe({
         onNext: (data) => {
-            userCount.count = data.get('usersCount').low;
+            userCount = data.get('usersCount').low;
         },
         onCompleted: () => {
-            res.status(200).send(userCount);
+            res.status(200).send(JSON.stringify(userCount));
             session.close()},
         onError: (err) => {console.log(err)}
     })
