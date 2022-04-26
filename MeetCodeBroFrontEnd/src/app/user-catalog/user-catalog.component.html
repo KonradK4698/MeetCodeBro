@@ -1,1 +1,19 @@
-<p>user-catalog works!</p>
+<mat-paginator
+    (page)="getPageIndex($event)"
+    [length]="userNumber"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="pageIndex"
+    aria-label="Select page">
+</mat-paginator>
+
+<mat-paginator
+    (page)="getPageIndex($event)"
+    [length]="userNumber"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="pageIndex"
+    aria-label="Select page">
+</mat-paginator>

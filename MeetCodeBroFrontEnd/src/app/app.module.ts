@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthService } from './auth.service';
 import { AuthInterceptor } from './auth-interceptor';
+import { UserCatalogComponent } from './user-catalog/user-catalog.component';
 
 //angular material
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -27,7 +28,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
-import { UserCatalogComponent } from './user-catalog/user-catalog.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { UserCatalogComponent } from './user-catalog/user-catalog.component';
     MatTabsModule,
     MatSelectModule,
     MatDividerModule,
+    MatPaginatorModule
   ],
   providers: [
     AuthService,
