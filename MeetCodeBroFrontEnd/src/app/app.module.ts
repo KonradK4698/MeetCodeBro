@@ -29,6 +29,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -58,7 +62,11 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatTabsModule,
     MatSelectModule,
     MatDividerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatExpansionModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatCheckboxModule
   ],
   providers: [
     AuthService,
