@@ -1,19 +1,134 @@
-<mat-paginator
-    (page)="getPageIndex($event)"
-    [length]="userNumber"
-    [pageSize]="pageSize"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="pageIndex"
-    aria-label="Select page">
-</mat-paginator>
+<mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Imię i Nazwisko
+            </mat-panel-title>
+            <mat-panel-description>
+                Wprowadź imię i nazwisko wyszukiwanego użytkownika
+                <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
 
-<mat-paginator
-    (page)="getPageIndex($event)"
-    [length]="userNumber"
-    [pageSize]="pageSize"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="pageIndex"
-    aria-label="Select page">
-</mat-paginator>
+            <mat-form-field class="userInformation" appearance="fill">
+                <mat-label>Imię</mat-label>
+                <input type="text" matInput [formControl]="userName" placeholder="Tony">
+                <mat-hint>Proszę podać imię</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field class="userInformation" appearance="fill">
+                <mat-label>Nazwisko</mat-label>
+                <input type="text" matInput [formControl]="userSurname" placeholder="Stark">
+                <mat-hint>Proszę podać nazwisko</mat-hint>
+            </mat-form-field>
+
+            <mat-action-row>
+                <button mat-button color="primary" (click)="nextStep()">Next</button>
+            </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Technologie
+            </mat-panel-title>
+            <mat-panel-description>
+                Wybierz technologie jakie ma znać wyszukiwana osoba
+                <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field id="technologyFormField" appearance="fill">
+            <mat-label>Wybierz technologie</mat-label>
+            <mat-chip-list #technologyList aria-label="Fruit selection">
+              <mat-chip color="primary"
+                *ngFor="let technology of technologies"
+                (removed)="remove(technology)">
+                {{technology}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input
+                placeholder="Znajdź technologie..."
+                #technologyInput
+                [formControl]="userTechnologies"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="technologyList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let tech of filteredTechnologies | async" [value]="tech">
+                {{tech}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Media społecznościowe
+            </mat-panel-title>
+            <mat-panel-description>
+                Jakie media społecznościowe ma posiadać użytkownik
+                <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="socialMediaContainer">
+            <mat-checkbox color="primary" [formControl]="userLinkedin">LinkedIn</mat-checkbox>
+            <mat-checkbox color="primary" [formControl]="userGithub">GitHub</mat-checkbox>
+        </div>
+            <mat-action-row>
+                <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" (click)="nextStep()">Wyszukaj</button>
+            </mat-action-row>
+    </mat-expansion-panel>
+</mat-accordion>
+
+<mat-list id="catalogList">
+    <mat-list-item> 
+        <mat-paginator
+        class="catalogPaginator"
+        (page)="getPageIndex($event)"
+        [length]="userNumber"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageIndex"
+        aria-label="Select page">
+        </mat-paginator>
+    </mat-list-item>
+    <mat-list-item class="userRow" *ngFor="let user of usersToShow"> 
+        <img class="userPhoto" src="../../assets/profile.jpg">  
+        <span class="userName">{{user.name}}</span> 
+        <span class="userSurname">{{user.surname}} {{user.id}}</span>  
+        <div class="space"></div>
+        <button mat-button>
+            <mat-icon class="material-icons-outlined">done_outline</mat-icon>
+        </button>
+        <button mat-button>
+            <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
+        </button>
+    </mat-list-item>
+    <mat-list-item> 
+        <mat-paginator
+        class="catalogPaginator"
+        (page)="getPageIndex($event)"
+        [length]="userNumber"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageIndex"
+        aria-label="Select page">
+        </mat-paginator>
+    </mat-list-item>
+</mat-list>
+

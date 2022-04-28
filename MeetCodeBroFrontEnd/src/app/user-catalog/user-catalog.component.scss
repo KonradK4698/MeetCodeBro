@@ -1,0 +1,33 @@
+#catalogList
+    .catalogPaginator{
+        width: 100%;
+    }
+    .userRow{
+        height: 100px;
+        margin: 10px 0px;
+    }
+        .space{
+            flex: 1 1 auto;
+        }
+        .userPhoto{
+            width: 80px;
+            height: 80px;
+        }
+.userInformation{
+    width: 20%;
+    margin-right: 10px;
+}
+
+#technologyFormField{
+    width: 100%;
+}
+
+.socialMediaContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: baseline;
+    justify-content: flex-start;
+    gap: 25px;
+    width: 100%;
+}
