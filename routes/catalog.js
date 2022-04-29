@@ -25,8 +25,8 @@ let testData = {
 const createQuery = (data) => {
     let startQuery = " MATCH (u:User), (t:Technologies)";
     let whereQuery = ''
-    let withQuery = ' WITH count(u) AS userCount'
-    let endQuery = " RETURN u AS users, userCount"
+    let withQuery = ' WITH count( DISTINCT u) AS userCount'
+    let endQuery = " RETURN DISTINCT u AS users, userCount"
     if(data.name !== ''){
         whereQuery += ` u.name CONTAINS "${data.name}"`;
     }
@@ -61,11 +61,10 @@ const createQuery = (data) => {
     const query = `${startQuery}${whereQuery != '' ? ` WHERE ${whereQuery}` : ""}${withQuery}${startQuery}${whereQuery != '' ? `WHERE ${whereQuery}` : ""}${endQuery}`;
 
     console.log(query.trim());
-
-    return query
+    return query.trim()
 }
 
-createQuery(testData);
+
 
 // //pobierz liczbę użytkowników dostępnych w bazie danych
 // router.get('/userCount', (req,res)=>{
@@ -83,18 +82,34 @@ createQuery(testData);
 // })
 
 //pobierz dane o użytkownikach niezbędne do wyświetlenia w katalogu
-router.post('/getUsers', (req,res)=>{
+router.post('/getUsers/:page/:limit', (req,res)=>{
     const session = driver.session();
-    const skip = req.body.skip;
-    const limit = req.body.limit;
+    const skip = req.params.page;
+    const limit = req.params.limit;
     const usersArray = [];
-    session.run(`MATCH (u:User) RETURN u AS users ORDER BY ID(users) SKIP ${skip} LIMIT ${limit}`).subscribe({
+    const dataToSend = {
+        userCount: 0, 
+        users: usersArray
+    }
+    const searchData = {
+        name: req.body.name,
+        surname: req.body.surname,
+        technologies: req.body.technologies,
+        socialMedia: req.body.socialMedia
+    }
+    const query = createQuery(searchData);
+    console.log(`${query} ORDER BY ID(users) SKIP ${skip} LIMIT ${limit}`);
+    session.run(`${query} ORDER BY ID(users) SKIP ${skip} LIMIT ${limit}`).subscribe({
         onNext: (data) => {
-            const usersData = data.get('users')
+            const usersData = data.get('users');
+            const userCount = data.get('userCount');
+            dataToSend.userCount = userCount.low;
             const newUser = getNecessaryUserData(usersData);
             usersArray.push(newUser);
         },
-        onCompleted: ()=>{res.status(200).send(usersArray); session.close()},
+        onCompleted: ()=>{
+            res.status(200).send(dataToSend); 
+            session.close()},
         onError: (err)=>{console.log(err)}
     })
 })
