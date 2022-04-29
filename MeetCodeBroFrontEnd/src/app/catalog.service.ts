@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, tap, map} from 'rxjs/operators';
 import { User } from './user';
-import { limitSkip } from './catalog';
+import { limitSkip, SearchData, CatalogData } from './catalog';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,9 @@ export class CatalogService {
 
   getUserPerPage(data: limitSkip): Observable<User[]>{
     return this.http.post<User[]>(`${this.userCatalogPath}/getUsers`, data, this.httpOptions)
+  }
+
+  getUsers(page: number, limit: number, searchData: SearchData): Observable<CatalogData>{
+    return this.http.post<CatalogData>(`${this.userCatalogPath}/getUsers/${page}/${limit}`, searchData, this.httpOptions);
   }
 }

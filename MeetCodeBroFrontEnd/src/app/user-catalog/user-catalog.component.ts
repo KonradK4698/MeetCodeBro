@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 
 import { CatalogService } from '../catalog.service';
-import { limitSkip } from '../catalog';
+import { limitSkip, SearchData } from '../catalog';
 import { User } from '../user';
 import jwt_decode from 'jwt-decode';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -45,6 +45,16 @@ export class UserCatalogComponent implements OnInit {
   userLinkedin = new FormControl('');
   userGithub = new FormControl('');
 
+  searchData: SearchData = {
+    name: '',
+    surname: '',
+    technologies: [],
+    socialMedia: {
+      github: false,
+      linkedin: false
+    }
+  };
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   technologies:string[] = []; 
   allTechnologies = ["JavaScript", "C++", "C#"];
@@ -85,15 +95,13 @@ export class UserCatalogComponent implements OnInit {
   //zakończenie sekcji wyszukiwania
 
   public userNumber: number = 0;
-  public pageSize: number = 1;
+  public pageSize: number = 3;
   public showFirstLastButtons: boolean = true;
   public pageSizeOptions: number[] = [1, 3, 10, 25, 100, 1000];
   public pageIndex: number = 0;
   public usersToShow: User[] = [];
-  private paginationData: limitSkip = {
-    skip: this.pageIndex, 
-    limit: this.pageSize
-  }
+  page: number = this.pageIndex;
+  limit: number = this.pageSize;
 
 
   constructor(private catalogService: CatalogService) { 
@@ -104,24 +112,47 @@ export class UserCatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersCount();
-    this.getUsers(this.paginationData);
+    // this.usersCount();
+    this.getUsers(this.page, this.limit, this.searchData);
   }
 
-  usersCount(): void{
-    this.catalogService.getUsersCount().subscribe({
-      next: (data) => {this.userNumber = data},
-      complete: () => {console.log("pobrano liczbę użytkowników " + this.userNumber)},
-      error: (err) => {console.log(err)}
-    })
-  }
+  // usersCount(): void{
+  //   this.catalogService.getUsersCount().subscribe({
+  //     next: (data) => {this.userNumber = data},
+  //     complete: () => {console.log("pobrano liczbę użytkowników " + this.userNumber)},
+  //     error: (err) => {console.log(err)}
+  //   })
+  // }
 
-  getUsers(data: limitSkip): void{
-    this.catalogService.getUserPerPage(data).subscribe({
-      next: (users) => {this.usersToShow = users},
+  // getUsers(data: limitSkip): void{
+  //   this.catalogService.getUserPerPage(data).subscribe({
+  //     next: (users) => {this.usersToShow = users},
+  //     complete: () => {console.log(this.usersToShow)},
+  //     error: (err) => {console.log(err)}
+  //   })
+  // }
+
+  getUsers(page: number, limit: number, data: SearchData): void{
+    this.catalogService.getUsers(page, limit, data).subscribe({
+      next: (users) => {
+        this.userNumber = users.userCount;
+        this.usersToShow = users.users;
+      },
       complete: () => {console.log(this.usersToShow)},
       error: (err) => {console.log(err)}
     })
+  }
+
+  searchUsers(): void{
+    this.searchData.name = this.userName.value; 
+    this.searchData.surname = this.userSurname.value; 
+    this.searchData.technologies = this.technologies;
+    this.searchData.socialMedia.github = this.userGithub.value;
+    this.searchData.socialMedia.linkedin = this.userLinkedin.value;
+
+    this.pageIndex = 0;
+
+    this.getUsers(this.page, this.limit, this.searchData);
   }
 
   getPageIndex(event: PageEvent): void{
@@ -130,7 +161,7 @@ export class UserCatalogComponent implements OnInit {
 
     if(currentPageIndex !== event.pageIndex){
       console.log("Zmieniono stronę " + event.pageIndex);
-      this.paginationData.skip = (event.pageIndex * this.pageSize);
+      this.page = (event.pageIndex * this.pageSize);
       this.pageIndex = event.pageIndex;
     }else{
       console.log("Strona bez zmian " + currentPageIndex)
@@ -138,12 +169,13 @@ export class UserCatalogComponent implements OnInit {
 
     if(currentPageSize !== event.pageSize){
       console.log("Zmieniono ilość: " + event.pageSize);
-      this.paginationData.limit = event.pageSize;
+      this.limit = event.pageSize;
       this.pageSize = event.pageSize;
     }else{
       console.log("Ilość bez zmian: " + currentPageSize);
     }
 
-    this.getUsers(this.paginationData);
+    
+    this.getUsers(this.page, this.limit, this.searchData);
   }
 }
