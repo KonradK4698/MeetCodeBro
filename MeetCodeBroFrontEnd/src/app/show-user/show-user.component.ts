@@ -3,6 +3,7 @@ import { User } from '../user';
 import jwt_decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-show-user',
@@ -12,16 +13,17 @@ import { UserProfileService } from '../user-profile.service';
 export class ShowUserComponent implements OnInit {
 
   userInformation: User = {};
-  private userID: number = 0;
+  private userID: number = Number(this.route.snapshot.paramMap.get('id'));
 
-  constructor(private userProfileService: UserProfileService) { }
+  constructor(private userProfileService: UserProfileService, private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
+    this.getUser();
   }
 
   getUser(): void{ 
     this.userProfileService.getUserData(this.userID).subscribe({
-      next: (user) => {console.log(user)}, 
+      next: (user) => {this.userInformation = user}, 
       complete: () => {console.log("dane zostały pobrane")},
       error: (err) => {console.log(err)}
     })
