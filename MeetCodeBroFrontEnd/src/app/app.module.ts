@@ -33,6 +33,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { ShowUserComponent } from './show-user/show-user.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     RegisterComponent,
     LoginComponent,
     UserProfileComponent,
-    UserCatalogComponent
+    UserCatalogComponent,
+    ShowUserComponent
   ],
   imports: [
     BrowserModule,
