@@ -1,1 +1,22 @@
-
+<div id="showUserContainer">
+    <img class="showUserPhoto" src="../../assets/profile.jpg" />
+    <div class="showUserPersonalData">
+        <span class="showUserName">{{userInformation.name}}</span>
+        <span class="showUserSurname">{{userInformation.surname}}</span>
+    </div>
+    <textarea class="showUserDescription"></textarea>
+    <mat-chip-list aria-label="User technology">
+        <mat-chip color="primary" selected>Primary fish</mat-chip>
+        <mat-chip color="accent" selected>Accent fish</mat-chip>
+    </mat-chip-list>
+    <div class="showUserSocialMedia">
+        <div class="socialMediaContainer">
+            <img src="../../assets/linkedin.png" />
+            <a href="{{userInformation.linkedin}}">Znajdź mnie na Linkedin</a>
+        </div>
+        <div class="socialMediaContainer">
+            <img src="../../assets/github.png" />
+            <a href="{{userInformation.github}}">Zobacz moje prace na Github</a>
+        </div>
+    </div>
+</div>
