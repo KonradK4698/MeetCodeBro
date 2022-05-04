@@ -53,6 +53,12 @@ export class UserProfileService {
     )
   }
 
+  getUserTechnology(userID: number): Observable<Technology[]>{
+    return this.http.get<Technology[]>(`${this.technologyApi}/${userID}`, this.httpOptions).pipe(
+      catchError(this.handleError)
+    )
+  }
+
   addUserTechnology(userID: number, choosenTechnologies: Technology[]): Observable<Technology[]>{
     return this.http.post<Technology[]>(`${this.userApiUrl}/technologies/${userID}`, choosenTechnologies, this.httpOptions).pipe(
       catchError(this.handleError)
