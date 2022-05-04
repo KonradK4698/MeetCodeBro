@@ -11,6 +11,12 @@ import { FriendsService } from '../friends.service';
 import { decodeJWTToken } from '../decodeToken';
 import { Friend } from '../friend';
 
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { Observable } from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
 interface Invite{
   invitationID: number,
   senderID: number
@@ -50,11 +56,7 @@ export class UserProfileComponent implements OnInit {
     userGithub: new FormControl(''),
     userLinkedin: new FormControl('')
   })
-
-  technologies = new FormControl();
   
-  
-
   public result: Technology[] = [];
   
 
@@ -69,7 +71,55 @@ export class UserProfileComponent implements OnInit {
     itemsShowLimit: 10,
     allowSearchFilter: true,
   };
-  
+
+  //wybór tehnologii
+  separatorKeysCodes: number[] = [];
+  userTechnologiesName:string[] = []; 
+  userTechnologiesId:number[] = [];
+  allTechnologies: Technology[] = [];
+  userTechnologies = new FormControl('');
+
+  addTechnology(event: MatChipInputEvent): void {
+    
+    const value = (event.value || '').trim();
+    if (value) {
+      this.userTechnologiesName.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.userTechnologies.setValue(null);
+  }
+
+  removeTechnology(technology: string): void {
+    const index = this.userTechnologiesName.indexOf(technology);
+    let techID = 0;
+    if (index >= 0) {
+      this.userTechnologiesName.splice(index, 1);
+    }
+
+    this.allTechnologies.map(tech => {
+      if(tech.Name === technology){
+        techID = tech.ID;
+        const techIdIndex = this.userTechnologiesId.indexOf(techID);
+        if(techIdIndex >= 0){
+          this.userTechnologiesId.splice(index, 1);
+        }
+      }
+    })
+
+    console.log(this.userTechnologiesId);
+
+  }
+
+  selectTechnology(event: MatAutocompleteSelectedEvent): void {
+    this.userTechnologiesName.push(event.option.viewValue);
+    this.userTechnologiesId.push(event.option.value);
+
+    console.log(this.userTechnologiesId);
+    this.userTechnologies.setValue(null);
+  }
 
   constructor(private userProfileService: UserProfileService,private authService: AuthService, private friendsService: FriendsService){}
   
@@ -78,7 +128,7 @@ export class UserProfileComponent implements OnInit {
     if(this.authService.isLoggedOut()){
       this.authService.logout();
     }
-    
+
     this.getTechnologies();
 
     this.getInvitation();
@@ -92,7 +142,7 @@ export class UserProfileComponent implements OnInit {
 
   getTechnologies(): void{
       this.userProfileService.getTechnologies().subscribe({
-      next: (data) => {this.result = data; console.log(data)},
+      next: (data) => {this.allTechnologies = data; console.log(data)},
       complete: () => {console.log("pobrano technologie");},
       error: (err) => {console.log(err);}
     })

@@ -37,7 +37,36 @@
                 <button mat-flat-button color="primary" type="submit"> Zatwierdź </button>
             </form>
         </mat-tab>
-        <mat-tab label="Umiejętności">Content 2</mat-tab>
+        <mat-tab label="Umiejętności">
+            Wybierz technologie które znasz: <br/>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Wybierz technologie</mat-label>
+                <mat-chip-list #technologyList aria-label="User technologies">
+                  <mat-chip color="primary"
+                    *ngFor="let technology of userTechnologiesName"
+                    (removed)="removeTechnology(technology)">
+                    {{technology}}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                  <input
+                    #technologyInput
+                    [formControl]="userTechnologies"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="technologyList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addTechnology($event)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectTechnology($event)">
+                  <mat-option *ngFor="let tech of allTechnologies" [value]="tech.ID">
+                    {{tech.Name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+        </mat-tab>
         <mat-tab label="Znajomi">
             <div id="user-friend-container">
                 <div class="user-inviations">
@@ -93,22 +122,3 @@
     </mat-tab-group>
 
 </div>
-
-<mat-form-field appearance="fill">
-    <mat-label>Toppings</mat-label>
-    <mat-select [value]="selected" multiple>
-      <mat-option *ngFor="let r of result" [value]="r.ID">{{r.Name}}</mat-option>
-    </mat-select>
-</mat-form-field>
-
-<form [formGroup]="userProfileForm" (ngSubmit)="addUserData()">    
-    <ng-multiselect-dropdown
-    [placeholder]="'custom placeholder'"
-    [settings]="dropdownSettings"
-    [data]="result"
-    (onSelect)="chooseTechnology($event)"
-    >
-    </ng-multiselect-dropdown>
-
-    <button type="submit"> Zatwierdź </button>
-</form>
