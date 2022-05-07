@@ -40,7 +40,6 @@ export class UserProfileComponent implements OnInit {
   message: string = '';
   value:boolean = true
   selectedItems = [];
-  private choosenTechnologies: Technology[] = [];
   public invitationSenderInfoArr: User[] = []; 
   private invitationsArr: Invite[] = [];
   public invitationSenders: UserWithInvite[] = [];
@@ -74,8 +73,11 @@ export class UserProfileComponent implements OnInit {
 
   //wybór tehnologii
   separatorKeysCodes: number[] = [];
+  userKnownTechnologies: Technology[] =[];
   userTechnologiesName:string[] = []; 
   userTechnologiesId:number[] = [];
+  userTechToDelete:number[] = [];
+  userTechToCreate:number[] = [];
   allTechnologies: Technology[] = [];
   userTechnologies = new FormControl('');
 
@@ -109,15 +111,12 @@ export class UserProfileComponent implements OnInit {
       }
     })
 
-    console.log(this.userTechnologiesId);
-
   }
 
   selectTechnology(event: MatAutocompleteSelectedEvent): void {
     this.userTechnologiesName.push(event.option.viewValue);
     this.userTechnologiesId.push(event.option.value);
-
-    console.log(this.userTechnologiesId);
+    
     this.userTechnologies.setValue(null);
   }
 
@@ -130,6 +129,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     this.getTechnologies();
+    this.geUserTechnologies();
 
     this.getInvitation();
 
@@ -148,16 +148,95 @@ export class UserProfileComponent implements OnInit {
     })
   }
 
-  chooseTechnology(item: any): void{
-    this.choosenTechnologies.push(item.ID); 
+  geUserTechnologies(): void{
+    const userID = decodeJWTToken().sub.low;
+
+    this.userProfileService.getUserTechnology(userID).subscribe({
+      next: (data)=>{
+        this.userKnownTechnologies.length = 0;
+        this.userTechnologiesName.length = 0;
+        this.userTechnologiesId.length = 0;
+        this.userKnownTechnologies = data;
+        data.map(technology => {
+          this.userTechnologiesName.push(technology.Name);
+          this.userTechnologiesId.push(technology.ID);
+        })
+      },
+      complete: () => {}, 
+      error: (err) => {console.log(err)}
+    })
   }
 
-  addUserTechnologies(userID: number, choosenTechnologies: Technology[]): void{
+  addUserTechnologies(choosenTechnologies: number[]): void{
+    const userID = decodeJWTToken().sub.low;
+
     this.userProfileService.addUserTechnology(userID, choosenTechnologies).subscribe({
       next: (data) => {console.log(data)},
-      complete: () => {console.log("Dodano technologie");},
+      complete: () => {
+        console.log("Dodano technologie"); 
+        this.userTechToCreate.length = 0;
+        this.geUserTechnologies();
+      },
       error: (err) => {console.log(err);}
     })
+  }
+
+  deleteUserTechnologies(choosenTechnologies: number[]): void{
+    const userID = decodeJWTToken().sub.low;
+
+    this.userProfileService.deleteUserTechnology(userID, choosenTechnologies).subscribe({
+      next: (data) => {console.log(data)},
+      complete: () => {
+        console.log("Usunięto technologie");
+        this.userTechToDelete.length = 0;
+        this.geUserTechnologies();
+      },
+      error: (err) => {console.log(err);}
+    })
+  }
+
+  saveUserTechnologies(): void{
+
+    this.userTechToCreate = this.userTechnologiesId.filter(tech => {
+      const isKnowTechnology = this.userKnownTechnologies.find(data => data.ID === tech )
+      const readyToDelete = this.userTechToDelete.includes(tech);
+
+      if(readyToDelete === true){
+        const indexToRemove = this.userTechToDelete.indexOf(tech);
+        this.userTechToDelete.splice(indexToRemove, 1);
+      }
+      
+      if(isKnowTechnology === undefined){
+        return tech
+      }else{ 
+        return false
+      };
+
+    })
+
+    this.userKnownTechnologies.filter(tech => {
+      const techExists = this.userTechnologiesId.includes(tech.ID);
+
+      const readyToDelete = this.userTechToDelete.includes(tech.ID);
+
+      if(techExists === false && readyToDelete === false){
+        this.userTechToDelete.push(tech.ID)
+        return tech
+      }else{
+        return tech
+      }
+    })
+
+    if(this.userTechToCreate.length > 0){
+      this.addUserTechnologies(this.userTechToCreate);
+    }
+
+    if(this.userTechToDelete.length > 0){
+      this.deleteUserTechnologies(this.userTechToDelete);
+    }
+
+    console.log(this.userTechToCreate);
+    
   }
 
   setValueInForm(userData: User): void{
