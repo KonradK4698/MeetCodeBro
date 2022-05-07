@@ -70,10 +70,20 @@ router.post('/technologies/:id', (req,res)=>{
     const session = driver.session();
     const userID = req.params.id;
     const choosenTechnologyIDArr = req.body;
-    res.end();
     session.run(`MATCH (t:Technologies), (u:User) WHERE ID(u) = ${userID} AND [techName IN [${choosenTechnologyIDArr}] WHERE ID(t) = techName] CREATE (u)-[k:Know]->(t) RETURN k`).subscribe({
         onNext: data => console.log(data.get('k')),
         onCompleted: () => {session.close(); res.status(201).end()},
+        onError: (err) => {console.log(err)}
+    })
+})
+
+router.delete('/technologies/:id/:techID', (req,res) => {
+    const session = driver.session(); 
+    const userID = req.params.id; 
+    const techIdToDelete = req.params.techID; 
+    session.run(`MATCH (u:User)-[k:Know]->(t:Technologies) WHERE ID(u) = ${userID} AND [techID IN ${techIdToDelete} WHERE ID(t) = techID] DELETE k`).subscribe({
+        onNext: (data) => {console.log(data.get('k'))},
+        onCompleted: () => {session.close(); res.status(200).end()},
         onError: (err) => {console.log(err)}
     })
 })

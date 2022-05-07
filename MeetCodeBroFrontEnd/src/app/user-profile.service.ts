@@ -35,7 +35,7 @@ export class UserProfileService {
   }
 
   getUserArray(userIdArr: number[]): Observable<User[]>{
-    console.log(encodeURIComponent(JSON.stringify(userIdArr)))
+    // console.log(encodeURIComponent(JSON.stringify(userIdArr)))
     return this.http.get<User[]>(`${this.userApiUrl}/moreThenOne/id/${encodeURIComponent(JSON.stringify(userIdArr))}`, this.httpOptions).pipe(
       catchError(this.handleError)
     );;
@@ -59,8 +59,15 @@ export class UserProfileService {
     )
   }
 
-  addUserTechnology(userID: number, choosenTechnologies: Technology[]): Observable<Technology[]>{
+  addUserTechnology(userID: number, choosenTechnologies: number[]): Observable<Technology[]>{
     return this.http.post<Technology[]>(`${this.userApiUrl}/technologies/${userID}`, choosenTechnologies, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteUserTechnology(userID: number, choosenTechnologies: number[]): Observable<Technology[]>{
+    console.log(encodeURIComponent(JSON.stringify(choosenTechnologies)))
+    return this.http.delete<Technology[]>(`${this.userApiUrl}/technologies/${userID}/${encodeURIComponent(JSON.stringify(choosenTechnologies))}`, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
