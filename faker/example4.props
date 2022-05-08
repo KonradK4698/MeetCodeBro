@@ -1,0 +1,46 @@
+# General Settings
+#
+# Commit Size
+tdg.commit.size=2000
+#
+####### NODE DEFINITIONS ######
+#
+# Utworzenie 10 użytkowników
+#
+tdg.node.list=u1:User:10,u2:User:10,u3:User:10,t:Technologies:23
+#
+# Właściwości opisujące użytkownika
+#
+# User
+tdg.node.props.User.name=firstName
+tdg.node.props.User.surname=lastName
+tdg.node.props.User.description=txtSentence
+tdg.node.props.User.email=email
+tdg.node.props.User.github=url
+tdg.node.props.User.linkedin=url
+tdg.node.props.User.salt=constant:8ca9af6f401472e93250027c405d68362a309ea77541cdade1686b1ce6c49a68
+tdg.node.props.User.hash=constant:ae920c52aa563e86b87a9d10881319ee5569a3bcb44826a769e8d5015cda108d8af2c2e1f02927b277d26a38da122c15bae4ef75d3b5c61acc9d59d194a15e44
+#
+#Technologie
+#
+tdg.node.props.Technologies.name=listFile:technologies.txt,string
+#Lista relacji
+#
+tdg.rel.list=userFriend1,userFriend2,userInvite1,userInvite2,userTechnology1,userTechnology2
+#
+#Utworzenie relacji między użytkownikami 
+#
+tdg.rel.def.userFriend1=u1,IsNotFriends,u2,n-1
+tdg.rel.def.userFriend2=u2,IsNotFriends,u1,n-1
+#
+tdg.rel.def.userInvite1=u1,InviteToFriends,u3,1-n
+tdg.rel.def.userInvite2=u2,InviteToFriends,u3,1-n
+#
+tdg.rel.def.userTechnology1=u1,Know,t,1-n
+tdg.rel.def.userTechnology2=u2,Know,t,1-n
+#
+#Zamiana relacji na przyjacieli
+#
+tdg.repeatnode.list=createFriend
+tdg.repeatnode.input.createFriend=query:MATCH p=(u:User)-[f:IsNotFriends]->(u1:User) CREATE (u)-[i:IsFriends]->(u1), (u1)-[i2:IsFriends]->(u) DELETE f RETURN u
+
