@@ -33,7 +33,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { ShowUserComponent } from './show-user/show-user.component';
+import { ShowUserComponent } from './show-user/show-user.component';4
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ShowUserComponent } from './show-user/show-user.component';
     MatExpansionModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     AuthService,
