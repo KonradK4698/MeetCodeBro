@@ -100,6 +100,7 @@ export class UserCatalogComponent implements OnInit {
   public pageSizeOptions: number[] = [1, 3, 10, 25, 100, 1000];
   public pageIndex: number = 0;
   public usersToShow: User[] = [];
+  public dataReady: boolean = false;
   page: number = this.pageIndex;
   limit: number = this.pageSize;
 
@@ -112,33 +113,18 @@ export class UserCatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.usersCount();
     this.getUsers(this.page, this.limit, this.searchData);
   }
-
-  // usersCount(): void{
-  //   this.catalogService.getUsersCount().subscribe({
-  //     next: (data) => {this.userNumber = data},
-  //     complete: () => {console.log("pobrano liczbę użytkowników " + this.userNumber)},
-  //     error: (err) => {console.log(err)}
-  //   })
-  // }
-
-  // getUsers(data: limitSkip): void{
-  //   this.catalogService.getUserPerPage(data).subscribe({
-  //     next: (users) => {this.usersToShow = users},
-  //     complete: () => {console.log(this.usersToShow)},
-  //     error: (err) => {console.log(err)}
-  //   })
-  // }
 
   getUsers(page: number, limit: number, data: SearchData): void{
     this.catalogService.getUsers(page, limit, data).subscribe({
       next: (users) => {
+        this.usersToShow= [];
         this.userNumber = users.userCount;
         this.usersToShow = users.users;
+        console.log(this.dataReady);
       },
-      complete: () => {console.log(this.usersToShow)},
+      complete: () => {this.dataReady = true; console.log(this.usersToShow)},
       error: (err) => {console.log(err)}
     })
   }
@@ -151,6 +137,8 @@ export class UserCatalogComponent implements OnInit {
     this.searchData.socialMedia.linkedin = this.userLinkedin.value;
 
     this.pageIndex = 0;
+    
+    this.dataReady = false;
 
     this.getUsers(this.page, this.limit, this.searchData);
   }
@@ -158,6 +146,7 @@ export class UserCatalogComponent implements OnInit {
   getPageIndex(event: PageEvent): void{
     let currentPageIndex: number = this.pageIndex;
     let currentPageSize: number = this.pageSize;
+    this.dataReady = false;
 
     if(currentPageIndex !== event.pageIndex){
       console.log("Zmieniono stronę " + event.pageIndex);

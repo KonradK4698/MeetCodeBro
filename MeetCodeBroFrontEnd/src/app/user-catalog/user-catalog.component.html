@@ -106,18 +106,27 @@
         aria-label="Select page">
         </mat-paginator>
     </mat-list-item>
-    <mat-list-item class="userRow" *ngFor="let user of usersToShow"> 
-        <img class="userPhoto" src="../../assets/profile.jpg">  
-        <span class="userName">{{user.name}}</span> 
-        <span class="userSurname">{{user.surname}} {{user.id}}</span>  
-        <div class="space"></div>
-        <button mat-button>
-            <mat-icon class="material-icons-outlined">done_outline</mat-icon>
-        </button>
-        <a routerLink="/user/{{user.id}}" mat-button>
-            <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
-        </a>
-    </mat-list-item>
+
+    <ng-container *ngIf="dataReady">
+        <mat-list-item  class="userRow" *ngFor="let user of usersToShow"> 
+            <img class="userPhoto" src="../../assets/profile.jpg">  
+            <span class="userName">{{user.name}}</span> 
+            <span class="userSurname">{{user.surname}} {{user.id}}</span>  
+            <div class="space"></div>
+            <button mat-button>
+                <mat-icon class="material-icons-outlined">done_outline</mat-icon>
+            </button>
+            <a routerLink="/user/{{user.id}}" mat-button>
+                <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
+            </a>
+        </mat-list-item>
+    </ng-container>
+
+    <ng-container  *ngIf="dataReady == false">
+        <mat-list-item class="catalogSpinner">
+            <mat-spinner diameter="60"></mat-spinner>
+        </mat-list-item>
+    </ng-container>
     <mat-list-item> 
         <mat-paginator
         class="catalogPaginator"
