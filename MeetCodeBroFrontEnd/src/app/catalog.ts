@@ -8,7 +8,7 @@ export interface limitSkip{
 export interface SearchData{
     name: string, 
     surname: string, 
-    technologies: string[], 
+    technologies: number[], 
     socialMedia: {
         github:  boolean, 
         linkedin: boolean

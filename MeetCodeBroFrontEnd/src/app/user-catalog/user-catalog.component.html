@@ -42,25 +42,25 @@
             <mat-label>Wybierz technologie</mat-label>
             <mat-chip-list #technologyList aria-label="Fruit selection">
               <mat-chip color="primary"
-                *ngFor="let technology of technologies"
-                (removed)="remove(technology)">
+                *ngFor="let technology of userTechnologiesName"
+                (removed)="removeTechnology(technology)">
                 {{technology}}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
               <input
-                placeholder="Znajdź technologie..."
+                placeholder="Wybierz technologie..."
                 #technologyInput
                 [formControl]="userTechnologies"
                 [matAutocomplete]="auto"
                 [matChipInputFor]="technologyList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="add($event)">
+                (matChipInputTokenEnd)="addTechnology($event)">
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let tech of filteredTechnologies | async" [value]="tech">
-                {{tech}}
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectTechnology($event)">
+              <mat-option *ngFor="let tech of allTechnologies" [value]="tech.ID">
+                {{tech.Name}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>

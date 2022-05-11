@@ -41,9 +41,9 @@ const createQuery = (data) => {
 
     if(data.technologies.length !== 0){
         if(whereQuery !== ''){
-            whereQuery += ` AND t.name IN ${JSON.stringify(data.technologies)} AND (u)-[:Know]->(t)`;
+            whereQuery += ` AND ID(t) IN ${JSON.stringify(data.technologies)} AND (u)-[:Know]->(t)`;
         }else{
-            whereQuery += ` t.name IN ${JSON.stringify(data.technologies)} AND (u)-[:Know]->(t)`;
+            whereQuery += ` ID(t) IN ${JSON.stringify(data.technologies)} AND (u)-[:Know]->(t)`;
         }
     }
 

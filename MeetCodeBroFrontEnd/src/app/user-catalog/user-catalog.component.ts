@@ -11,7 +11,8 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-
+import { UserProfileService } from '../user-profile.service';
+import { Technology } from '../technology';
 
 
 
@@ -55,16 +56,20 @@ export class UserCatalogComponent implements OnInit {
     }
   };
 
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  technologies:string[] = []; 
-  allTechnologies = ["JavaScript", "C++", "C#"];
-  filteredTechnologies: Observable<string[]>;
+  //wybór tehnologii
+  separatorKeysCodes: number[] = [];
+  userKnownTechnologies: Technology[] =[];
+  userTechnologiesName:string[] = []; 
+  userTechnologiesId:number[] = [];
+  userTechToDelete:number[] = [];
+  userTechToCreate:number[] = [];
+  allTechnologies: Technology[] = [];
 
-  add(event: MatChipInputEvent): void {
+  addTechnology(event: MatChipInputEvent): void {
+    
     const value = (event.value || '').trim();
-
     if (value) {
-      this.technologies.push(value);
+      this.userTechnologiesName.push(value);
     }
 
     // Clear the input value
@@ -73,23 +78,30 @@ export class UserCatalogComponent implements OnInit {
     this.userTechnologies.setValue(null);
   }
 
-  remove(technology: string): void {
-    const index = this.technologies.indexOf(technology);
-
+  removeTechnology(technology: string): void {
+    const index = this.userTechnologiesName.indexOf(technology);
+    let techID = 0;
     if (index >= 0) {
-      this.technologies.splice(index, 1);
+      this.userTechnologiesName.splice(index, 1);
     }
+
+    this.allTechnologies.map(tech => {
+      if(tech.Name === technology){
+        techID = tech.ID;
+        const techIdIndex = this.userTechnologiesId.indexOf(techID);
+        if(techIdIndex >= 0){
+          this.userTechnologiesId.splice(index, 1);
+        }
+      }
+    })
+
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.technologies.push(event.option.viewValue);
+  selectTechnology(event: MatAutocompleteSelectedEvent): void {
+    this.userTechnologiesName.push(event.option.viewValue);
+    this.userTechnologiesId.push(event.option.value);
+    
     this.userTechnologies.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allTechnologies.filter(technology => technology.toLowerCase().includes(filterValue));
   }
 
   //zakończenie sekcji wyszukiwania
@@ -105,15 +117,11 @@ export class UserCatalogComponent implements OnInit {
   limit: number = this.pageSize;
 
 
-  constructor(private catalogService: CatalogService) { 
-    this.filteredTechnologies = this.userTechnologies.valueChanges.pipe(
-      startWith(null),
-      map((technology: string | null) => (technology ? this._filter(technology) : this.allTechnologies.slice())),
-    );
-  }
+  constructor(private catalogService: CatalogService, private userProfileService: UserProfileService) { }
 
   ngOnInit(): void {
     this.getUsers(this.page, this.limit, this.searchData);
+    this.getTechnologies();
   }
 
   getUsers(page: number, limit: number, data: SearchData): void{
@@ -122,9 +130,8 @@ export class UserCatalogComponent implements OnInit {
         this.usersToShow= [];
         this.userNumber = users.userCount;
         this.usersToShow = users.users;
-        console.log(this.dataReady);
       },
-      complete: () => {this.dataReady = true; console.log(this.usersToShow)},
+      complete: () => {this.dataReady = true;},
       error: (err) => {console.log(err)}
     })
   }
@@ -132,7 +139,7 @@ export class UserCatalogComponent implements OnInit {
   searchUsers(): void{
     this.searchData.name = this.userName.value; 
     this.searchData.surname = this.userSurname.value; 
-    this.searchData.technologies = this.technologies;
+    this.searchData.technologies = this.userTechnologiesId;
     this.searchData.socialMedia.github = this.userGithub.value;
     this.searchData.socialMedia.linkedin = this.userLinkedin.value;
 
@@ -167,4 +174,12 @@ export class UserCatalogComponent implements OnInit {
     
     this.getUsers(this.page, this.limit, this.searchData);
   }
+
+  getTechnologies(): void{
+    this.userProfileService.getTechnologies().subscribe({
+    next: (data) => {this.allTechnologies = data;},
+    complete: () => {console.log("pobrano technologie");},
+    error: (err) => {console.log(err);}
+  })
+}
 }
