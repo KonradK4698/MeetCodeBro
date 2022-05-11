@@ -73,8 +73,8 @@ export class UserProfileService {
     );
   }
 
-  deleteInvitation(userID: number, invitationID: number): Observable<string>{
-    return this.http.delete<string>(`${this.friendsApi}/deleteInvitation/${userID}/${invitationID}`, this.httpOptions).pipe(
+  deleteInvitation(userID: number, friendID: number): Observable<string>{
+    return this.http.delete<string>(`${this.friendsApi}/deleteInvitation/${userID}/${friendID}`, this.httpOptions).pipe(
       catchError(this.handleError)
     )
   }

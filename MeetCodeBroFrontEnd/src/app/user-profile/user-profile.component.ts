@@ -136,10 +136,6 @@ export class UserProfileComponent implements OnInit {
     this.getAllFriends();
   }
 
-  ngAfterViewInit(): void{
-    console.log("inicjalizacja")
-  }
-
   getTechnologies(): void{
       this.userProfileService.getTechnologies().subscribe({
       next: (data) => {this.allTechnologies = data; console.log(data)},
@@ -370,7 +366,6 @@ export class UserProfileComponent implements OnInit {
     })
   }
 
-
   deleteFriend(friendID: number): void{
     const userID = decodeJWTToken().sub.low;
 
@@ -381,11 +376,11 @@ export class UserProfileComponent implements OnInit {
     })
   }
 
-  addToFriend(senderID: number, invitationID: number): void{
+  addToFriend(senderID: number): void{
     const userID = decodeJWTToken().sub.low;
     this.userProfileService.addFriend(senderID, userID).subscribe({
       next: (data) => {console.log(data)},
-      complete: () => { console.log("dodano do znajomych"); this.deleteInvitation(invitationID); window.location.reload();},
+      complete: () => { console.log("dodano do znajomych"); this.deleteInvitation(senderID); window.location.reload();},
       error: (err) => { console.log(err)}
     })
   }

@@ -79,13 +79,13 @@
                             </mat-card-header>
                             <img mat-card-image src="../../assets/profile.jpg" alt="Photo of a Shiba Inu">
                             <mat-card-actions>
-                            <button mat-button (click)="addToFriend(sender.invitationInformation.senderID ,sender.invitationInformation.invitationID)">
+                            <button mat-button (click)="addToFriend(sender.invitationInformation.senderID)">
                                 <mat-icon class="material-icons-outlined">done_outline</mat-icon>
                             </button>
-                            <button mat-button>
+                            <button mat-button routerLink="/user/{{sender.invitationInformation.senderID}}">
                                 <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
                             </button>
-                            <button mat-button (click)="deleteInvitation(sender.invitationInformation.invitationID)">
+                            <button mat-button (click)="deleteInvitation(sender.invitationInformation.senderID)">
                                 <mat-icon class="material-icons-outlined">highlight_off</mat-icon>
                             </button>
                             </mat-card-actions>
@@ -105,7 +105,7 @@
                             <!-- <button mat-button>
                                 <mat-icon class="material-icons-outlined">done_outline</mat-icon>
                             </button> -->
-                            <button mat-button>
+                            <button mat-button routerLink="/user/{{friend.friendID}}">
                                 <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
                             </button>
                             <button mat-button (click)="deleteFriend(friend.friendID)">
@@ -115,10 +115,19 @@
                         </mat-card>
                     </div>
                 </div>
-                <div class="user-propositions">
-                    <span class="user-friends-header">Proponowani znajomi</span>
-                </div>
             </div>
+            </mat-tab>
+            <mat-tab label="Proponowani znajomi">
+                <div id="user-friend-container">
+                    <div class="user-inviations-skills">
+                        <span class="user-friends-header">Podobne technologie</span>
+                        <mat-card class="user-information-card"></mat-card>
+                    </div>
+                    <div class="user-inviations-friends">
+                        <span class="user-friends-header">Znajomi znajomych</span>
+                        <mat-card class="user-information-card"></mat-card>
+                    </div>
+                </div>
         </mat-tab>
     </mat-tab-group>
 
