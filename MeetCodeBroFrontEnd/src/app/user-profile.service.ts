@@ -5,6 +5,7 @@ import { catchError, retry, tap, map} from 'rxjs/operators';
 import { User } from './user';
 import { Technology } from 'src/app/technology';
 import { Friend } from './friend';
+import { Invite } from './invitations';
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +89,9 @@ export class UserProfileService {
 
   deleteFriend(userID: number, friendID: number): Observable<string>{
     return this.http.delete<string>(`${this.friendsApi}/${userID}/${friendID}`, this.httpOptions).pipe(catchError(this.handleError))
+  }
+
+  checkRelation(userID: number, friendID: number): Observable<Invite[]>{
+    return this.http.get<Invite[]>(`${this.friendsApi}//checkRelation/${userID}/${friendID}`, this.httpOptions).pipe(catchError(this.handleError))
   }
 }

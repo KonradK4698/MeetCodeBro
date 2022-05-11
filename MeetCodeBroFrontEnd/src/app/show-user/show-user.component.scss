@@ -1,0 +1,69 @@
+#showUserContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+    .showUserPhoto{
+        min-width: 70px;
+        width: 100%;
+        max-width: 200px;
+        margin-top: 20px;
+    }
+    .showUserPersonalData{
+        font-size: 24px;
+        font-weight: 400;
+    }
+        .showUserSurname{
+            padding-left: 10px;
+        }
+    .showUserDescription{
+        width: 50%;
+        background: none;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: 300;
+    }
+    mat-chip-list.showUserTechnologies{
+        width: 50%;
+        padding: 10px;
+    }
+        div.matChipListWrapper{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: -4px;
+            width: 100%;
+        }
+    .sectionHeader{
+        width: 100%;
+        font-size: 25px;
+        font-weight: 500;
+        text-align: center;
+    }
+    .showUserSocialMedia{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        align-content: baseline;
+        width: 50%;
+        padding: 10px 0;
+        gap: 20px;
+    }
+        .socialMediaContainer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            column-gap: 5px;
+        }
+            img{
+                width: 25px;
+            }

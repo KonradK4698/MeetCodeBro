@@ -21,4 +21,8 @@ export class FriendsService {
     return this.http.get<Invite[]>(`${this.friendsUrl}/getInvitation/${userID}`, this.httpOptions )
   }
 
+  sendInvitation(senderID: number, recipentID: number ): Observable<string>{
+    return this.http.post<string>(`${this.friendsUrl}/sendInvitation/${senderID}/${recipentID}`, this.httpOptions )
+  }
+
 }

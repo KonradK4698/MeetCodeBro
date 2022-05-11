@@ -18,23 +18,24 @@ router.get('/getInvitation/:ID', (req,res)=>{
 })
 
 //wyślij użytkownikowi prośbę o dodanie do znajomych
-router.post('/sendInvitation/:ID', (req,res)=>{
+router.post('/sendInvitation/:senderID/:recipentID', (req,res)=>{
     const session = driver.session();
-    const senderID = req.body.ID;
-    const recipentID = req.params.ID;
+    const senderID = req.params.senderID;
+    const recipentID = req.params.recipentID;
+    console.log(`Sender: ${senderID} Recipent: ${recipentID}`)
     session.run(`MATCH (sender:User), (recipent:User) WHERE ID(sender) = ${senderID} AND ID(recipent) = ${recipentID} CREATE (sender)-[i:InviteToFriends]->(recipent) RETURN type(i) AS type`).subscribe({
         onNext: (data) => {console.log(data.get('type'))},
-        onCompleted: ()=>{console.log("Utworzono relację"); res.end(); session.close()},
+        onCompleted: ()=>{res.status(200).send(JSON.stringify("Zaproszenie wysłane")); session.close()},
         onError: (err)=>{console.log(err)}
     })
 })
 
 //odrzuć (usuń) prośbę o dodanie do znajomych
-router.delete('/deleteInvitation/:userID/:invID', (req,res)=>{
+router.delete('/deleteInvitation/:userID/:friendID', (req,res)=>{
     const session = driver.session();
     const userID = req.params.userID;
-    const invitationID = req.params.invID;
-    session.run(`MATCH (u:User) WHERE ID(u) = ${userID} MATCH (u)-[i:InviteToFriends]-() WHERE (i IS NOT NULL = true AND ID(i) = ${invitationID}) DELETE i RETURN true AS confirmation`).subscribe({
+    const friendID = req.params.friendID;
+    session.run(`MATCH (u:User), (u2:User) WHERE ID(u) = ${userID} AND ID(u2) = ${friendID} MATCH (u)-[i:InviteToFriends]-(u2) WHERE (i IS NOT NULL = true) DELETE i RETURN true AS confirmation`).subscribe({
         onNext: (data) => {console.log(data.get('confirmation'))},
         onCompleted: ()=>{console.log("Usunięto relację"); res.end(); session.close()},
         onError: (err)=>{console.log(err)}
@@ -83,6 +84,19 @@ router.delete('/:userID/:friendID', (req,res)=>{
         onNext: (data) => {console.log(data.get('deletedRelationCount'))},
         onCompleted: ()=>{console.log("Usunięto przyjaciela"); res.end(); session.close()},
         onError: (err)=>{console.log(err)}
+    })
+})
+
+//sprawdź jaka relacja istnieje pomiędzy użytkownikami
+router.get('/checkRelation/:userID/:friendID', (req,res)=>{
+    const session = driver.session(); 
+    const userID = req.params.userID; 
+    const friendID = req.params.friendID; 
+    let relation = []
+    session.run(`MATCH (u:User)-[r]-(f:User) WHERE ID(u) = ${userID} AND ID(f) = ${friendID} RETURN collect(r) AS relation`).subscribe({
+        onNext: (data) => {relation = data.get('relation')},
+        onCompleted: () => {res.status(200).send(relation)},
+        onError: (err) => {console.log(err)}
     })
 })
 
