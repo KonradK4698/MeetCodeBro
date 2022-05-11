@@ -2,6 +2,23 @@ const express = require('express');
 const router = express.Router();
 const driver = require('../db');
 
+const getDataWithoutSaltHash = (userDataInfo) => {
+    const userDataProperties = userDataInfo.properties;
+    let propertiesWithoutSaltHash = {};
+        for(const key in userDataProperties){
+            if(userDataProperties.hasOwnProperty(key) && key !== "hash" && key !== "salt"){
+                propertiesWithoutSaltHash[key] =  userDataProperties[key];
+            }
+        }
+    
+    const userDataID = userDataInfo.identity.low;
+    propertiesWithoutSaltHash.id = userDataID;
+    
+    const userDataInfoJSON = propertiesWithoutSaltHash;
+
+    return userDataInfoJSON
+}
+
 //wyświetl wszystkie zaproszenia
 router.get('/getInvitation/:ID', (req,res)=>{
     const session = driver.session();
@@ -96,6 +113,22 @@ router.get('/checkRelation/:userID/:friendID', (req,res)=>{
     session.run(`MATCH (u:User)-[r]-(f:User) WHERE ID(u) = ${userID} AND ID(f) = ${friendID} RETURN collect(r) AS relation`).subscribe({
         onNext: (data) => {relation = data.get('relation')},
         onCompleted: () => {res.status(200).send(relation)},
+        onError: (err) => {console.log(err)}
+    })
+})
+
+//znajdź porponowanych znjaomych na podstawie znajomych przyjaciół
+router.get('/suggestFriends/:userID', (req,res)=>{
+    const session = driver.session();
+    const userID = req.params.userID;
+    const usersArray = [];
+    session.run(`MATCH q=(u:User)-[:IsFriend*1..3]->(u2:User) WHERE ID(u) = ${userID} AND ID(u2) <> ${userID} RETURN DISTINCT u2 As user`).subscribe({
+        onNext: (data) => {
+            const getUser = data.get('user');
+            const userData = getDataWithoutSaltHash(getUser);
+            usersArray.push(userData);
+        },
+        onCompleted: () => {res.status(200).send(usersArray); session.close()},
         onError: (err) => {console.log(err)}
     })
 })

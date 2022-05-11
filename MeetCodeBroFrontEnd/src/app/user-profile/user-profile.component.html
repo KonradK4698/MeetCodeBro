@@ -120,11 +120,29 @@
             <mat-tab label="Proponowani znajomi">
                 <div id="user-friend-container">
                     <div class="user-inviations-skills">
-                        <span class="user-friends-header">Podobne technologie</span>
-                        <mat-card class="user-information-card"></mat-card>
+                        <span class="user-friends-header">Znajomi znajomych</span>
+                        <div class="user-mat-card-container">
+                            <mat-card class="user-information-card"  *ngFor="let sugestedFriend of sugestedFriendsFromFriends;">
+                                <mat-card-header>
+                                <mat-card-title>{{sugestedFriend.name}} {{sugestedFriend.surname}}</mat-card-title>
+                                </mat-card-header>
+                                <img mat-card-image src="../../assets/profile.jpg" alt="Photo of a Shiba Inu">
+                                <mat-card-actions>
+                                <button mat-button (click)="addToFriend(sugestedFriend.id)">
+                                    <mat-icon class="material-icons-outlined">done_outline</mat-icon>
+                                </button>
+                                <a mat-button routerLink="/user/{{sugestedFriend.id}}">
+                                    <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
+                                </a>
+                                <button mat-button (click)="deleteInvitation(sugestedFriend.id)">
+                                    <mat-icon class="material-icons-outlined">highlight_off</mat-icon>
+                                </button>
+                                </mat-card-actions>
+                            </mat-card>
+                        </div>
                     </div>
                     <div class="user-inviations-friends">
-                        <span class="user-friends-header">Znajomi znajomych</span>
+                        <span class="user-friends-header">Podobne technologie</span>
                         <mat-card class="user-information-card"></mat-card>
                     </div>
                 </div>

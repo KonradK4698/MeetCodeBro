@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry, tap, map} from 'rxjs/operators';
 import { User } from './user';
 import { Technology } from 'src/app/technology';
-import { Friend } from './friend';
+import { Friend, SugestedUser } from './friend';
 import { Invite } from './invitations';
 
 @Injectable({
@@ -93,5 +93,9 @@ export class UserProfileService {
 
   checkRelation(userID: number, friendID: number): Observable<Invite[]>{
     return this.http.get<Invite[]>(`${this.friendsApi}//checkRelation/${userID}/${friendID}`, this.httpOptions).pipe(catchError(this.handleError))
+  }
+
+  getSugestedUser(userID: number): Observable<SugestedUser[]>{
+    return this.http.get<SugestedUser[]>(`${this.friendsApi}/suggestFriends/${userID}`, this.httpOptions).pipe(catchError(this.handleError));
   }
 }

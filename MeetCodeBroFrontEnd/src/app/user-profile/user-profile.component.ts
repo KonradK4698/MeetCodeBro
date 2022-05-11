@@ -9,7 +9,7 @@ import { Technology } from '../technology';
 import { AuthService } from '../auth.service';
 import { FriendsService } from '../friends.service';
 import { decodeJWTToken } from '../decodeToken';
-import { Friend } from '../friend';
+import { Friend, SugestedUser } from '../friend';
 
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -44,6 +44,7 @@ export class UserProfileComponent implements OnInit {
   private invitationsArr: Invite[] = [];
   public invitationSenders: UserWithInvite[] = [];
   public userFriends: Friend[] = [];
+  public sugestedFriendsFromFriends: SugestedUser[] = [];
 
   userInformation: User = {};
 
@@ -134,6 +135,8 @@ export class UserProfileComponent implements OnInit {
     this.getInvitation();
 
     this.getAllFriends();
+
+    this.sugestsFriends();
   }
 
   getTechnologies(): void{
@@ -382,6 +385,15 @@ export class UserProfileComponent implements OnInit {
       next: (data) => {console.log(data)},
       complete: () => { console.log("dodano do znajomych"); this.deleteInvitation(senderID); window.location.reload();},
       error: (err) => { console.log(err)}
+    })
+  }
+
+  sugestsFriends(): void{
+    const userID = decodeJWTToken().sub.low;
+    this.userProfileService.getSugestedUser(userID).subscribe({
+      next: (data) => { this.sugestedFriendsFromFriends = data},
+      complete: () => {},
+      error: (err)=> {console.log(err)}
     })
   }
 }
