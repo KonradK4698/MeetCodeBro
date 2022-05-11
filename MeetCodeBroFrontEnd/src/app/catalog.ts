@@ -1,3 +1,4 @@
+import { Technology } from "./technology"
 import { User } from "./user"
 
 export interface limitSkip{
@@ -17,5 +18,5 @@ export interface SearchData{
 
 export interface CatalogData{
     userCount: number, 
-    users: User[]
+    users: User[],
 }

@@ -1,3 +1,5 @@
+import { Technology } from "./technology";
+
 export interface User{
     id?: number;
     email?: string;
@@ -8,5 +10,6 @@ export interface User{
     linkedin?: string; 
     github?:  string; 
     label?: string[];
+    technologies?: Technology[]
 }
 

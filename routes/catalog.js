@@ -58,28 +58,12 @@ const createQuery = (data) => {
         
     }
 
-    const query = `${startQuery}${whereQuery != '' ? ` WHERE ${whereQuery}` : ""}${withQuery}${startQuery}${whereQuery != '' ? `WHERE ${whereQuery}` : ""}${endQuery}`;
+    const query = `${startQuery}${whereQuery != '' ? ` WHERE ${whereQuery}` : ""}${withQuery}${startQuery}${whereQuery != '' ? ` WHERE ${whereQuery}` : ""}${endQuery}`;
 
-    console.log(query.trim());
+    
     return query.trim()
 }
 
-
-
-// //pobierz liczbę użytkowników dostępnych w bazie danych
-// router.get('/userCount', (req,res)=>{
-//     const session = driver.session();
-//     let userCount = 0
-//     session.run('MATCH (u:User) RETURN count(u) AS usersCount').subscribe({
-//         onNext: (data) => {
-//             userCount = data.get('usersCount').low;
-//         },
-//         onCompleted: () => {
-//             res.status(200).send(JSON.stringify(userCount));
-//             session.close()},
-//         onError: (err) => {console.log(err)}
-//     })
-// })
 
 //pobierz dane o użytkownikach niezbędne do wyświetlenia w katalogu
 router.post('/getUsers/:page/:limit', (req,res)=>{
@@ -89,7 +73,7 @@ router.post('/getUsers/:page/:limit', (req,res)=>{
     const usersArray = [];
     const dataToSend = {
         userCount: 0, 
-        users: usersArray
+        users: usersArray,
     }
     const searchData = {
         name: req.body.name,
@@ -98,8 +82,8 @@ router.post('/getUsers/:page/:limit', (req,res)=>{
         socialMedia: req.body.socialMedia
     }
     const query = createQuery(searchData);
-    console.log(`${query} ORDER BY ID(users) SKIP ${skip} LIMIT ${limit}`);
-    session.run(`${query} ORDER BY ID(users) SKIP ${skip} LIMIT ${limit}`).subscribe({
+    console.log(`${query} ORDER BY users.name SKIP ${skip} LIMIT ${limit}`);
+    session.run(`${query} ORDER BY users.name SKIP ${skip} LIMIT ${limit}`).subscribe({
         onNext: (data) => {
             const usersData = data.get('users');
             const userCount = data.get('userCount');

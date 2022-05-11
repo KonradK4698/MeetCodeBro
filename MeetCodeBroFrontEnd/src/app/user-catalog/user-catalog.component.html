@@ -111,13 +111,14 @@
         <mat-list-item  class="userRow" *ngFor="let user of usersToShow"> 
             <img class="userPhoto" src="../../assets/profile.jpg">  
             <span class="userName">{{user.name}}</span> 
-            <span class="userSurname">{{user.surname}} {{user.id}}</span>  
+            <span class="userSurname">{{user.surname}}</span>  
             <div class="space"></div>
-            <button mat-button>
-                <mat-icon class="material-icons-outlined">done_outline</mat-icon>
-            </button>
+            <mat-chip-list aria-label="Fish selection">
+                <mat-chip *ngFor="let tech of user.technologies" color="accent" selected>{{tech.Name}}</mat-chip>
+            </mat-chip-list>
+            <div class="space"></div>
             <a routerLink="/user/{{user.id}}" mat-button>
-                <mat-icon class="material-icons-outlined">perm_identity</mat-icon>
+                <mat-icon class="material-icons-outlined">perm_identity</mat-icon> Zobacz profil
             </a>
         </mat-list-item>
     </ng-container>

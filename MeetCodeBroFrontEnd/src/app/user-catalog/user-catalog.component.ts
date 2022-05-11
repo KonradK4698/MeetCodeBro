@@ -5,7 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { CatalogService } from '../catalog.service';
 import { limitSkip, SearchData } from '../catalog';
 import { User } from '../user';
-import jwt_decode from 'jwt-decode';
+import { decodeJWTToken } from '../decodeToken';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -126,12 +126,12 @@ export class UserCatalogComponent implements OnInit {
 
   getUsers(page: number, limit: number, data: SearchData): void{
     this.catalogService.getUsers(page, limit, data).subscribe({
-      next: (users) => {
+      next: (usersData) => {
         this.usersToShow= [];
-        this.userNumber = users.userCount;
-        this.usersToShow = users.users;
+        this.userNumber = usersData.userCount;
+        this.usersToShow = usersData.users;
       },
-      complete: () => {this.dataReady = true;},
+      complete: () => {this.getUserTechnologies()},
       error: (err) => {console.log(err)}
     })
   }
@@ -181,5 +181,21 @@ export class UserCatalogComponent implements OnInit {
     complete: () => {console.log("pobrano technologie");},
     error: (err) => {console.log(err);}
   })
+}
+
+getUserTechnologies() :void{
+  this.usersToShow.map(user => {
+    this.userProfileService.getUserTechnology(<number>user.id).subscribe({
+      next: (data) => {
+        console.log(JSON.stringify(data))
+        user.technologies = data;
+      },
+      complete: () => {},
+      error: (err) => {console.log(err);}
+    })
+  })
+
+  
+  this.dataReady = true; 
 }
 }
